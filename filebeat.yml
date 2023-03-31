@@ -1,0 +1,21 @@
+filebeat.inputs:
+- type: container
+  paths:
+    - "/usr/local/apache2/logs/*.log"
+  processors:
+  - add_docker_metadata: ~
+  - add_host_metadata: ~
+
+filebeat.config:
+  strict.perms: false
+
+  #output.elasticsearch:
+  # hosts: ["es01:9200"]
+  # protocol: "https"
+  # username: "elastic"
+  # password: "pass@123"
+  # ssl.enabled: true
+  # ssl.certificate_authorities:
+  #   - "/usr/share/filebeat/certs/ca/ca.crt"
+  # ssl.certificate: "/usr/share/filebeat/certs/es01/es01.crt"
+  # ssl.key: "/usr/share/filebeat/certs/es01/es01.key"

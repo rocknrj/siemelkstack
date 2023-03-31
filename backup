@@ -146,50 +146,14 @@ services:
       es01:
         condition: service_healthy
     image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
-    
-    environment:
-      - ELASTICSEARCH_HOSTS=https://es01:9200 
-
     volumes:
       - ${LOGSTASH_PIPELINE_PATH}:/usr/share/logstash/pipeline/
     ports:
       - 4000:4000 # my custom port
     mem_limit: ${MEM_LIMIT}
-
-  apache:
-    image: httpd:latest
-    ports:
-      - 8080:80
-    volumes:
-      - ./apache_logs:/usr/local/apache2/logs/
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
-    user: root
-    volumes:
-      - certs:/usr/share/filebeat/certs
-      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
-    command: >
-      filebeat -e 
-        -c /usr/share/filebeat/filebeat.yml
-        -E output.elasticsearch.hosts=["es01:9200"]
-        -E output.elasticsearch.protocol=https
-        -E output.elasticsearch.username=elastic
-        -E output.elasticsearch.password=${ELASTIC_PASSWORD}
-        -E output.elasticsearch.ssl.enabled=true
-        -E output.elasticsearch.ssl.certificate_authorities=/usr/share/filebeat/certs/ca/ca.crt
-        -E output.elasticsearch.ssl.certificate=/usr/share/filebeat/certs/es01/es01.crt
-        -E output.elasticsearch.ssl.key=/usr/share/filebeat/certs/es01/es01.key
-    depends_on:
-      - es01
-    restart: always
-
+     
 volumes:
-  certs: 
+  certs:
     driver: local
   esdata01:
     driver: local
