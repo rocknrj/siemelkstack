@@ -185,6 +185,7 @@ services:
         -E output.elasticsearch.ssl.certificate=/usr/share/filebeat/certs/es01/es01.crt
         -E output.elasticsearch.ssl.key=/usr/share/filebeat/certs/es01/es01.key
     depends_on:
+      - logstash
       - es01
     restart: always
 
